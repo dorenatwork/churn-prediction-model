@@ -16,23 +16,23 @@ flowchart LR
 
     subgraph Batch["Batch Processing & Features"]
         B1[Nightly ETL job]
-        B2[Feature engineering\n(tenure, RFM, ticket counts)]
+        B2["Feature engineering<br/>(tenure, RFM, ticket counts)"]
         B3[(Feature store / warehouse table)]
     end
 
     subgraph Training["Training Pipeline (orchestrated, e.g. Prefect)"]
         C1[Load features + labels]
-        C2[Train/val/test split\n70/15/15, stratified]
-        C3[Train candidates:\nLogReg, RandomForest, XGBoost]
-        C4[MLflow Tracking\n(params, metrics, artifacts)]
-        C5{Select best\nby val PR-AUC}
-        C6[Evaluate once on\nheld-out test set]
+        C2["Train/val/test split<br/>70/15/15, stratified"]
+        C3["Train candidates:<br/>LogReg, RandomForest, XGBoost"]
+        C4["MLflow Tracking<br/>(params, metrics, artifacts)"]
+        C5{"Select best<br/>by val PR-AUC"}
+        C6["Evaluate once on<br/>held-out test set"]
         C7[(MLflow Model Registry)]
     end
 
     subgraph Serving["Prediction Serving"]
         D1[FastAPI service]
-        D2[Loads model from registry\n'Production' alias]
+        D2["Loads model from registry<br/>'Production' alias"]
     end
 
     subgraph Consumers["Consuming Applications"]
