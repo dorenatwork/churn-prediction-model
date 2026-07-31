@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+
+# data (raw Kaggle export is not redistributed; see README for how to obtain it)
+data/raw/*.csv
+data/processed/*.csv
+data/processed/*.parquet
+
+# ML artifacts
+mlruns/
+mlartifacts/
+mlflow.db
+models/*.joblib
+models/*.json
+!models/.gitkeep
+
+reports/figures/*.png
+!reports/figures/.gitkeep
