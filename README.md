@@ -2,7 +2,60 @@
 
 A small end-to-end ML system that predicts whether an e-commerce customer is likely to churn: data prep, model comparison with MLflow tracking, explainability, a FastAPI prediction service, tests, and a production architecture writeup.
 
-![Production architecture diagram](reports/figures/architecture_diagram.png)
+```mermaid
+flowchart LR
+    subgraph Sources["Data Sources"]
+        A1[Orders / transactions DB]
+        A2[Support ticketing system]
+        A3[Customer profile / CRM]
+    end
+
+    subgraph Batch["Batch Processing & Features"]
+        B1[Nightly ETL job]
+        B2["Feature engineering<br/>(tenure, RFM, ticket counts)"]
+        B3[(Feature store / warehouse table)]
+    end
+
+    subgraph Training["Training Pipeline (orchestrated, e.g. Prefect)"]
+        C1[Load features + labels]
+        C2["Train/val/test split<br/>70/15/15, stratified"]
+        C3["Train candidates:<br/>LogReg, RandomForest, XGBoost"]
+        C4["MLflow Tracking<br/>(params, metrics, artifacts)"]
+        C5{"Select best<br/>by val PR-AUC"}
+        C6["Evaluate once on<br/>held-out test set"]
+        C7[(MLflow Model Registry)]
+    end
+
+    subgraph Serving["Prediction Serving"]
+        D1[FastAPI service]
+        D2["Loads model from registry<br/>'Production' alias"]
+    end
+
+    subgraph Consumers["Consuming Applications"]
+        E1[CRM retention workflow]
+        E2[Marketing automation]
+        E3[Customer success dashboard]
+    end
+
+    subgraph Ops["Monitoring"]
+        F1[Prediction/feature logging]
+        F2[Drift detection job]
+        F3[Alerting]
+    end
+
+    A1 --> B1
+    A2 --> B1
+    A3 --> B1
+    B1 --> B2 --> B3
+    B3 --> C1 --> C2 --> C3 --> C4
+    C3 --> C5 --> C6 --> C7
+    C7 --> D2 --> D1
+    D1 --> E1
+    D1 --> E2
+    D1 --> E3
+    D1 -.logs.-> F1 --> F2 --> F3
+    F3 -.triggers.-> C1
+```
 
 ## 1. Dataset
 
