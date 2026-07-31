@@ -2,6 +2,8 @@
 
 A small end-to-end ML system that predicts whether an e-commerce customer is likely to churn: data prep, model comparison with MLflow tracking, explainability, a FastAPI prediction service, tests, and a production architecture writeup.
 
+![Production architecture diagram](reports/figures/architecture_diagram.png)
+
 ## 1. Dataset
 
 Source: [ankitverma2010/ecommerce-customer-churn-analysis-and-prediction](https://www.kaggle.com/datasets/ankitverma2010/ecommerce-customer-churn-analysis-and-prediction) on Kaggle, distributed as `E Commerce Dataset.xlsx` (sheet `E Comm`), 5,630 rows, 16.8% churn rate.
@@ -150,7 +152,7 @@ Example request/response:
 
 ## 9. Production architecture
 
-See [`architecture/architecture.md`](architecture/architecture.md) for the full diagram and notes on monitoring, drift detection, retraining triggers, and model versioning via the MLflow Model Registry.
+See the diagram at the top of this README, and [`architecture/architecture.md`](architecture/architecture.md) for the diagram source (regenerate via `python -m src.architecture_diagram`) and notes on monitoring, drift detection, retraining triggers, and model versioning via the MLflow Model Registry.
 
 ## 10. Tests & reproducibility
 
